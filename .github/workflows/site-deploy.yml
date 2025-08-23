@@ -1,0 +1,21 @@
+name: Site Deploy (S3 Sync + CF Invalidate)
+on:
+  push: { branches: [main], paths: ["site/**", ".github/workflows/site-deploy.yml"] }
+permissions: { id-token: write, contents: read }
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  S3_BUCKET: ${{ vars.S3_BUCKET }}
+  CF_DISTRIBUTION_ID: ${{ vars.CF_DISTRIBUTION_ID }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.SYNC_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: S3 Sync
+        run: aws s3 sync ./site "s3://${S3_BUCKET}" --delete
+      - name: CloudFront Invalidate
+        run: aws cloudfront create-invalidation --distribution-id "${CF_DISTRIBUTION_ID}" --paths "/*"

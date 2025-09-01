@@ -130,3 +130,5 @@ resource "aws_s3_bucket_policy" "site" {
     ]
   })
 }
+
+# plan-check trigger 2025-08-27T22:22:05.3133111+09:00

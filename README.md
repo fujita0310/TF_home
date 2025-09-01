@@ -1,6 +1,6 @@
 # プロジェクト #1 進捗ログ
 
-## 現在の状態 (2025-08-28 時点)
+## 現在の状態 
 - S3 バケット + CloudFront (OAC) → Terraform で構築済み
 - GitHub OIDC プロバイダ → 作成済み
 - IAM ロール (Terraform 用 / SiteSync 用) → 作成済み
@@ -27,3 +27,16 @@
 - 必要なら terraform import で既存リソースを state に取り込み
 - Apply を main で実行して CI/CD を完成させる
 - site-deploy.yml で index.html 更新が自動反映されるかテスト
+
+## 現在の状態 
+- S3 バケット + CloudFront (OAC) → Terraform で構築済み
+- GitHub OIDC プロバイダ → 作成済み
+- IAM ロール (Terraform 用 / SiteSync 用) → 作成済み
+- GitHub Actions:
+  - terraform.yml → main ブランチで Plan / Apply 成功
+  - site-deploy.yml → index.html 更新が S3 に反映 → CloudFront 経由で確認済み ✅
+
+## 次にやること
+- site-deploy.yml にキャッシュ制御や差分Invalidationなどの最適化を追加検討
+- 必要なら Route53 + ACM で独自ドメイン対応
+- コスト監視（Budget アラーム）を Terraform 化
